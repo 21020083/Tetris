@@ -8,7 +8,7 @@
 #define SCREEN_HEIGHT 640
 #define speed 0,2
 using namespace std;
-enum dir {NONE,UP,LEFT,DOWN,RIGHT}key;
+enum dir {NONE,UP,LEFT,DOWN,RIGHT,SPACE}key;
 SDL_Color WHITE{255,255,255};
 SDL_Color RED{255,0,0};
 Uint32 delay=1300;
@@ -242,14 +242,34 @@ void fall(Shape&s ,playground& p)
             }
     }
 }
-void checkLevel()
+void drop(Shape &s,playground &p)
 {
-    if(score>=1000)
-    {
-        delay-=300;
-    }
+    while(p.canMove(s))
+
+        {
+            s.y+=block_size;
+            s.draw(renderer);
+        }
+
+    s.y-=block_size;
+    p.lock(s,renderer);
+    s=Board.next_piece;
+    s.x=0;
+    s.y=0;
+    Board.update();
 
 }
+void checkLevel()
+{
+    if(score>=1000 && score<= 1500)
+    {
+        delay = 900;
+    }
+    if(score<=2000 && score >1500)
+        delay = 600;
+}
+
+
 
 
 void update(){
@@ -283,6 +303,11 @@ void update(){
               s.x-=block_size;
         break;
             }
+
+    case SPACE:
+        drop(s,p);
+        break;
+
     default:
         break;
     }
@@ -301,7 +326,7 @@ void update(){
     }
     checkLevel();
 };
-void cleargame(playground &p )
+void cleargame(playground&p)
 {
     p.init();
     score=0;
@@ -352,6 +377,8 @@ if(SDL_Init(SDL_INIT_VIDEO) < 0){
         SDL_Event e;
         while(running){
             int startloop=SDL_GetTicks();
+            if(!Mix_PlayingMusic())
+                se.playMusic();
             while (SDL_PollEvent(&e))
         {
             if (e.type == SDL_QUIT)
@@ -377,6 +404,10 @@ if(SDL_Init(SDL_INIT_VIDEO) < 0){
 
                     case SDLK_RIGHT:
                         key=RIGHT;
+                        break;
+
+                    case SDLK_SPACE:
+                        key = SPACE;
                         break;
                 }
             }
@@ -404,7 +435,4 @@ if(SDL_Init(SDL_INIT_VIDEO) < 0){
     SDL_Quit();
     return 0;
 }
-
-
-
 
