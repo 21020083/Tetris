@@ -24,6 +24,7 @@
 * Tính điểm số.
 * Chơi lại nhiều lần.
 * Các nút điều khiển cơ bản của trò chơi Tetris.
+* Video giới thiệu game: https://youtu.be/bMgOFP2nidg
 ## 4. Các kĩ thuật lập trình được sử dụng: 
 * Cấu trúc.
 * Đồ họa.
